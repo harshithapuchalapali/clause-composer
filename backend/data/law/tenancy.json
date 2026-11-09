@@ -1,0 +1,82 @@
+{
+  "note": "Curated plain-language summaries of tenancy-law principles for Indian residential rentals. These are paraphrases, not verbatim statute: replace or extend this file with your own state's Act text to make the answers authoritative.",
+  "docs": [
+    {
+      "id": "deposit-cap",
+      "act": "Model Tenancy Act, 2021",
+      "ref": "s.11(1) — security deposit",
+      "title": "Cap on the security deposit",
+      "text": "The security deposit for residential premises must not be more than two months' rent. For non-residential premises the limit is six months' rent. A deposit above the cap is contrary to the Act, and the agreement should say how and when it is refunded."
+    },
+    {
+      "id": "deposit-refund",
+      "act": "Model Tenancy Act, 2021",
+      "ref": "s.11 — refund of deposit",
+      "title": "Refund of the deposit after deducting damage",
+      "text": "The landlord must refund the security deposit when possession is handed back, after deducting only the cost of damage the tenant actually caused. Deductions cannot be left to the landlord's sole discretion, and a refund deadline should be written into the agreement."
+    },
+    {
+      "id": "agreement-in-writing",
+      "act": "Model Tenancy Act, 2021",
+      "ref": "s.4 — tenancy agreement",
+      "title": "Tenancy agreement must be written and registered",
+      "text": "A tenancy is to be created by a written agreement signed by both parties and registered with the Rent Authority. The agreement should set out rent, deposit, notice, repairs, and the grounds on which the tenancy can end, so that oral or one-sided terms cannot be added later."
+    },
+    {
+      "id": "lock-in",
+      "act": "Model Tenancy Act, 2021 with state Rent Control Acts",
+      "ref": "tenancy period and termination",
+      "title": "Lock-in periods are contractual, not statutory",
+      "text": "Neither the Model Tenancy Act nor most state Rent Control Acts require a lock-in period. A lock-in exists only because the agreement creates it, so its length and the penalty for leaving early are open to negotiation and should be balanced between landlord and tenant."
+    },
+    {
+      "id": "exit-penalty",
+      "act": "Indian Contract Act, 1872",
+      "ref": "s.74 — compensation for breach",
+      "title": "Exit penalties must be reasonable compensation",
+      "text": "A clause that makes the tenant pay a penalty or the whole remaining rent on leaving early must reflect a genuine loss to the landlord. Courts will not enforce a penalty that is out of proportion to the actual loss, and a one-sided penalty with no matching duty on the landlord is a strong ground to renegotiate."
+    },
+    {
+      "id": "rent-increase",
+      "act": "Model Tenancy Act, 2021",
+      "ref": "revision of rent",
+      "title": "Rent can rise only as the agreement allows",
+      "text": "The rent may be revised only in the manner and at the intervals written in the agreement, and a revision requires prior written notice to the tenant. An open-ended power for the landlord to raise rent at any time during the tenancy is not supported by the Act."
+    },
+    {
+      "id": "landlord-entry",
+      "act": "Model Tenancy Act, 2021",
+      "ref": "landlord's right to enter",
+      "title": "The landlord must give notice before entering",
+      "text": "The landlord may enter the premises only after giving the tenant prior notice at a reasonable time, and except in an emergency may not enter without notice. A clause allowing entry at any time overrides this protection and should be replaced with a minimum notice period such as 24 hours."
+    },
+    {
+      "id": "repairs",
+      "act": "Model Tenancy Act, 2021",
+      "ref": "duties of landlord and tenant",
+      "title": "Structural repairs are the landlord's duty",
+      "text": "The landlord is responsible for structural repairs and for keeping the premises habitable, while the tenant looks after routine upkeep and minor day-to-day repairs. A clause that makes the tenant pay for all repairs, including structural or major work, shifts a duty the Act places on the landlord."
+    },
+    {
+      "id": "eviction",
+      "act": "Model Tenancy Act, 2021",
+      "ref": "eviction of tenants",
+      "title": "Eviction needs a ground and due process",
+      "text": "A tenancy can be terminated only on grounds recognised by the Act, such as non-payment of rent, misuse of the premises, or the landlord's genuine need, and only by following the Rent Authority procedure after written notice. Immediate eviction without notice is not something the tenant has to accept in a contract."
+    },
+    {
+      "id": "notice-to-quit",
+      "act": "state Rent Control Acts",
+      "ref": "notice to quit",
+      "title": "Notice periods should be equal and reasonable",
+      "text": "Where the agreement fixes a notice period, both sides should give the same notice. Where it is silent, a reasonable period, commonly one month, is expected. A clause that lets the landlord end the tenancy on short or no notice while binding the tenant to a long period is one-sided."
+    },
+    {
+      "id": "subletting",
+      "act": "Model Tenancy Act, 2021",
+      "ref": "subletting",
+      "title": "Subletting needs written consent",
+      "text": "The tenant may sublet the premises only with the previous written consent of the landlord, and the consent can be refused on reasonable grounds. A total ban on subletting is enforceable, but it should be stated clearly rather than implied."
+    }
+  ]
+}

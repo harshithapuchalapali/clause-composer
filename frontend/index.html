@@ -1,0 +1,508 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>Clause Compass — rental agreement risk check</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Ccircle cx='12' cy='12' r='10' fill='%231f5e4b'/%3E%3Cpath d='M15.6 8.4 13.5 13.5 8.4 15.6 10.5 10.5Z' fill='%23fffdf8'/%3E%3C/svg%3E">
+<style>
+:root{
+  --bg:#f5f2ec;--surface:#fffdf8;--ink:#191817;--muted:#6f6a60;--line:#e2dcd1;
+  --accent:#1f5e4b;--accent-ink:#fffdf8;
+  --high:#b4472c;--med:#a97a10;--low:#5f7a34;
+  --high-bg:#fbe9e4;--med-bg:#fbf1dc;--low-bg:#eff3e2;
+  --radius:16px;--shadow:0 1px 2px rgba(25,24,23,.05),0 14px 28px -22px rgba(25,24,23,.4);
+  --shadow-lift:0 2px 4px rgba(25,24,23,.06),0 26px 48px -34px rgba(25,24,23,.6);
+  --serif:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif;
+  --ease:cubic-bezier(.2,.7,.2,1);
+}
+@media (prefers-color-scheme:dark){:root{
+  --bg:#131311;--surface:#1b1b18;--ink:#f1ede4;--muted:#a29c90;--line:#302e29;
+  --accent:#84d3b2;--accent-ink:#0f231b;
+  --high:#e88a6d;--med:#dfb256;--low:#a8c06b;
+  --high-bg:#2c1d18;--med-bg:#2b2517;--low-bg:#20261a;--shadow:none;
+  --shadow-lift:0 0 0 1px rgba(255,255,255,.03),0 26px 48px -30px rgba(0,0,0,.9);
+}}
+*{box-sizing:border-box}
+html{background:var(--bg);overflow-x:clip}
+body{margin:0;background:transparent;color:var(--ink);font:16px/1.6 ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  -webkit-font-smoothing:antialiased;overflow-wrap:break-word;overflow-x:clip}
+h1,h2,h3{letter-spacing:-.02em;line-height:1.15;margin:0}
+a{color:var(--accent)}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+.topbar{position:sticky;top:0;z-index:10;display:flex;align-items:center;justify-content:space-between;gap:12px;
+  padding:14px clamp(16px,4vw,32px);background:color-mix(in srgb,var(--bg) 88%,transparent);
+  backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.brand{display:inline-flex;align-items:center;gap:9px;font-weight:650;font-size:17px;letter-spacing:-.01em;
+  color:var(--ink);text-decoration:none}
+.brand svg{color:var(--accent)}
+.top-right{display:flex;align-items:center;gap:10px;min-width:0}
+#topSummary{max-width:min(46ch,44vw);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+main{max-width:1180px;margin:0 auto;padding:clamp(22px,4vw,48px) clamp(16px,4vw,32px) 64px}
+footer{text-align:center;color:var(--muted);font-size:12px;padding:0 16px 40px}
+.eyebrow{margin:0 0 10px;font-size:12px;font-weight:650;letter-spacing:.12em;text-transform:uppercase;color:var(--accent)}
+.hero h1{font-family:var(--serif);font-size:clamp(2.2rem,5.6vw,3.6rem);font-weight:600;max-width:15ch}
+.lede{max-width:60ch;margin:16px 0 28px;color:var(--muted);font-size:clamp(1rem,1.6vw,1.12rem)}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:22px;box-shadow:var(--shadow)}
+.card+.card{margin-top:16px}
+.card-head{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:4px 12px;margin-bottom:14px}
+.card-head h2{font-size:15px;font-weight:650}
+.note{color:var(--muted);font-size:12.5px;margin:0}
+.row{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px}
+button,.file{font:inherit;font-size:14px;border-radius:10px;border:1px solid transparent;padding:11px 16px;
+  cursor:pointer;transition:background .15s,border-color .15s,color .15s,transform .05s;text-align:left}
+button:active{transform:translateY(1px)}
+button:disabled{opacity:.6;cursor:progress}
+.primary{background:var(--accent);color:var(--accent-ink);font-weight:650;box-shadow:var(--shadow)}
+.primary:hover{filter:brightness(1.07)}
+.ghost{background:transparent;border-color:var(--line);color:var(--ink)}
+.ghost:hover{border-color:var(--accent);color:var(--accent)}
+.sm{padding:8px 12px;font-size:13px}
+.link{background:none;border:0;padding:0;font-size:12.5px;color:var(--accent);text-decoration:underline;text-underline-offset:3px}
+.file{display:inline-flex;align-items:center;gap:8px;border-color:var(--line)}
+.file:hover{border-color:var(--accent);color:var(--accent)}
+textarea{width:100%;min-height:210px;resize:vertical;background:color-mix(in srgb,var(--bg) 70%,var(--surface));color:var(--ink);
+  border:1px solid var(--line);border-radius:12px;padding:16px;font:14.5px/1.65 inherit}
+textarea::placeholder{color:var(--muted)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.hint{color:var(--muted);font-size:12.5px;margin:12px 0 0}
+.err{color:var(--high);font-size:13.5px}
+.err:not(:empty){margin-top:10px}
+.features{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));margin:20px 0 0;padding:0;list-style:none}
+.features li{display:flex;align-items:flex-start;gap:12px;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:15px 16px;font-size:14px}
+.features b{display:block;font-size:13px;letter-spacing:.01em;margin-bottom:2px}
+.features span{color:var(--muted);font-size:13px}
+.features .fi{flex:0 0 auto;display:grid;place-items:center;width:30px;height:30px;border-radius:9px;color:var(--accent);
+  background:color-mix(in srgb,var(--accent) 11%,transparent)}
+.field-head{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin-bottom:8px}
+.field-head label{margin:0;font-size:13px;font-weight:650;color:var(--ink);letter-spacing:.01em}
+.row.actions{align-items:center;margin-top:16px}
+.row.actions .primary{margin-right:auto}
+.row.actions .file{margin-left:0}
+.summary{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:14px}
+.summary b{font-size:15px}
+.pills{display:flex;flex-wrap:wrap;gap:8px}
+.pill{font-size:12px;font-weight:650;padding:4px 10px;border-radius:999px;border:1px solid currentColor}
+.pill.high{color:var(--high)}.pill.medium{color:var(--med)}.pill.low{color:var(--low)}
+.grid{display:grid;gap:16px;grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);align-items:start;margin-top:16px}
+.col{display:flex;flex-direction:column;gap:16px;min-width:0}
+.doc{padding-right:6px}
+.cl{display:block;width:100%;padding:11px 13px;margin:0 0 8px;border:0;border-left:4px solid transparent;border-radius:0 10px 10px 0;
+  background:transparent;color:var(--ink);font-size:14px;line-height:1.55;cursor:pointer}
+.cl:hover{background:color-mix(in srgb,var(--ink) 5%,transparent)}
+.cl.high{background:var(--high-bg);border-color:var(--high)}
+.cl.medium{background:var(--med-bg);border-color:var(--med)}
+.cl.low{background:var(--low-bg);border-color:var(--low)}
+.cl small{display:block;font-size:11.5px;font-weight:650;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);margin-bottom:3px}
+.cl.high small{color:var(--high)}.cl.medium small{color:var(--med)}.cl.low small{color:var(--low)}
+.back{width:100%;justify-content:center;text-align:center;margin-top:6px}
+.risk{border-top:1px solid var(--line);padding:16px 0}
+.risk:first-child{border-top:0;padding-top:0}
+.risk:last-child{padding-bottom:0}
+.risk-top{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.badge{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:3px 8px;border-radius:6px;border:1px solid currentColor}
+.badge.high{color:var(--high)}.badge.medium{color:var(--med)}.badge.low{color:var(--low)}
+.risk h3{font-size:16px;margin:9px 0 6px}
+.risk p{margin:0 0 8px;font-size:14px}
+.risk .ask{font-size:13.5px;color:var(--muted)}
+.risk .ask span,.law span{display:block;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--accent)}
+.law{margin:0 0 10px;padding:11px 13px;border-left:3px solid var(--accent);border-radius:0 10px 10px 0;background:var(--bg)}
+.law p{margin:5px 0 6px;font-size:13.5px;line-height:1.55}
+.law cite{display:block;font-size:11.5px;font-style:normal;color:var(--muted)}
+.ocr{color:var(--med);background:var(--med-bg);border-radius:10px;padding:10px 12px;margin:12px 0 0;font-size:13px}
+.ai{margin-top:12px;padding:13px 15px;border-radius:12px;background:var(--bg);border:1px solid var(--line);font-size:14px}
+.ai p{margin:0 0 8px}
+.ai p:last-of-type{margin-bottom:6px}
+.ai .src{display:block;font-size:11.5px;color:var(--muted)}
+.ai.pending{color:var(--muted);font-style:italic}
+.ai.err{color:var(--high);border-color:var(--high)}
+.fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.fields>div{display:flex;flex-direction:column}
+.fields>div>label:first-child{flex:1}
+label{display:block;font-size:12.5px;color:var(--muted);margin-bottom:5px}
+input[type=number]{width:100%;padding:9px 10px;background:var(--bg);color:var(--ink);border:1px solid var(--line);border-radius:9px;font:inherit;font-size:14px}
+.check{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--ink);margin-top:6px}
+input[type=range]{width:100%;accent-color:var(--accent);margin:6px 0 14px}
+.stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.stat{background:var(--bg);border-radius:10px;padding:10px 12px}
+.stat span{display:block;font-size:11.5px;color:var(--muted)}
+.stat b{font-size:16px;font-variant-numeric:tabular-nums}
+#chart{width:100%;height:auto;margin-top:14px;overflow:visible}
+pre{white-space:pre-wrap;background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:14px;font:13.5px/1.6 ui-monospace,SFMono-Regular,Consolas,monospace;margin:12px 0 0}
+pre:empty{display:none}
+.pgi{position:relative;margin:0}
+.pg{margin:0 0 14px}
+.pg img{display:block;width:100%;border:1px solid var(--line);border-radius:10px;background:#fff}
+.pg .mk{position:absolute;inset:0}
+.pg .mk i{position:absolute;border-radius:2px;cursor:pointer;background:color-mix(in srgb,var(--high) 26%,transparent);box-shadow:0 0 0 1px var(--high)}
+.pg .mk i.medium{background:color-mix(in srgb,var(--med) 28%,transparent);box-shadow:0 0 0 1px var(--med)}
+.pg .mk i.low{background:color-mix(in srgb,var(--low) 26%,transparent);box-shadow:0 0 0 1px var(--low)}
+.pg figcaption{font-size:11.5px;color:var(--muted);margin-top:4px}
+.flash{outline:3px solid transparent;outline-offset:3px;border-radius:8px;
+  animation:flash 1.2s var(--ease) 2}
+.print-only{display:none}
+
+/* ——— polish: ambient depth, reveal motion, tactile states ——— */
+body::before{content:"";position:fixed;inset:-25vmax;z-index:-1;pointer-events:none;
+  background:
+    radial-gradient(38vmax 38vmax at 18% 6%,color-mix(in srgb,var(--accent) 9%,transparent),transparent 64%),
+    radial-gradient(34vmax 34vmax at 84% 22%,color-mix(in srgb,var(--med) 8%,transparent),transparent 62%);
+  animation:ambient 30s ease-in-out infinite alternate}
+@keyframes ambient{to{transform:translate3d(2.5%,2%,0) scale(1.06)}}
+::selection{background:color-mix(in srgb,var(--accent) 26%,transparent);color:var(--ink)}
+@keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+@keyframes swipe{to{transform:scaleX(1)}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes pulseBox{0%,100%{opacity:.72}50%{opacity:1}}
+@keyframes barIn{from{transform:scaleY(0)}to{transform:scaleY(1)}}
+@keyframes flash{0%{outline-color:color-mix(in srgb,var(--accent) 75%,transparent)}100%{outline-color:transparent}}
+
+.hero{position:relative;isolation:isolate;overflow:clip}
+.hero::before{content:"";position:absolute;z-index:-1;right:-16vmin;top:-22vmin;width:min(52vmax,560px);aspect-ratio:1;
+  border-radius:50%;pointer-events:none;opacity:.5;animation:spin 120s linear infinite;
+  background:repeating-conic-gradient(from 0deg,color-mix(in srgb,var(--accent) 34%,transparent) 0 .9deg,transparent .9deg 6deg);
+  -webkit-mask:radial-gradient(circle,transparent 59.5%,#000 60%,#000 66%,transparent 74%);
+  mask:radial-gradient(circle,transparent 59.5%,#000 60%,#000 66%,transparent 74%)}
+.hero>*{position:relative}
+.hero h1{text-wrap:balance}
+.mark{position:relative;display:inline-block}
+.mark::after{content:"";position:absolute;left:0;right:0;bottom:-.02em;height:.1em;border-radius:99px;
+  background:linear-gradient(90deg,var(--accent),color-mix(in srgb,var(--accent) 25%,transparent));
+  transform:scaleX(0);transform-origin:left;animation:swipe .85s .35s var(--ease) forwards}
+.lede{text-wrap:pretty}
+
+#view-home>*{animation:rise .6s var(--ease) both}
+#view-home>*:nth-child(2){animation-delay:.06s}
+#view-home>*:nth-child(3){animation-delay:.12s}
+#view-home>*:nth-child(4){animation-delay:.18s}
+#view-home>*:nth-child(5){animation-delay:.24s}
+#view-result:not([hidden]) .card{animation:rise .5s var(--ease) both}
+#view-result:not([hidden]) .grid .col:nth-child(2) .card{animation-delay:.08s}
+#view-result .card,.features li{transition:box-shadow .25s var(--ease),border-color .25s var(--ease),transform .25s var(--ease)}
+#view-result .card:hover,.features li:hover{border-color:color-mix(in srgb,var(--accent) 26%,var(--line));box-shadow:var(--shadow-lift)}
+
+.primary{position:relative;overflow:hidden;display:inline-flex;align-items:center;gap:8px;
+  background:linear-gradient(180deg,color-mix(in srgb,var(--accent) 84%,var(--surface)),var(--accent));
+  box-shadow:0 1px 2px rgba(25,24,23,.12),0 10px 22px -16px color-mix(in srgb,var(--accent) 85%,transparent);
+  transition:transform .2s var(--ease),box-shadow .2s var(--ease),filter .2s var(--ease)}
+.primary::after{content:"";position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(115deg,transparent 34%,color-mix(in srgb,#fff 30%,transparent) 50%,transparent 66%);
+  transform:translateX(-130%);transition:transform .65s var(--ease)}
+.primary:hover{transform:translateY(-1px);filter:saturate(1.08) brightness(1.04)}
+.primary:hover::after{transform:translateX(130%)}
+.ghost{transition:border-color .18s var(--ease),color .18s var(--ease),background .18s var(--ease),transform .18s var(--ease)}
+.ghost:hover{transform:translateY(-1px);background:color-mix(in srgb,var(--accent) 6%,transparent)}
+.brand svg{transition:transform .5s var(--ease)}
+.brand:hover svg{transform:rotate(-14deg)}
+#analyzeBtn:disabled::before{content:"";flex:0 0 auto;width:13px;height:13px;border-radius:50%;
+  border:2px solid currentColor;border-top-color:transparent;animation:spin .75s linear infinite}
+
+textarea,input[type=number]{transition:border-color .18s var(--ease),box-shadow .18s var(--ease),background .18s var(--ease)}
+textarea:hover,input[type=number]:hover{border-color:color-mix(in srgb,var(--accent) 40%,var(--line))}
+textarea:focus,input[type=number]:focus{outline:none;border-color:var(--accent);
+  box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 28%,transparent)}
+
+.cl{transition:background .18s var(--ease),transform .18s var(--ease),box-shadow .18s var(--ease)}
+.cl:hover{transform:translateX(3px)}
+.cl.high:hover{box-shadow:inset 4px 0 0 var(--high)}
+.cl.medium:hover{box-shadow:inset 4px 0 0 var(--med)}
+.cl.low:hover{box-shadow:inset 4px 0 0 var(--low)}
+
+.risk{--sev:var(--accent);border-left:3px solid transparent;padding-left:13px;margin-left:-13px;
+  border-radius:0 10px 10px 0;animation:rise .5s var(--ease) both;animation-delay:calc(var(--i,0) * 55ms);
+  transition:background .2s var(--ease),border-color .2s var(--ease)}
+.risk[data-sev=high]{--sev:var(--high)}
+.risk[data-sev=medium]{--sev:var(--med)}
+.risk[data-sev=low]{--sev:var(--low)}
+.risk:hover{background:color-mix(in srgb,var(--sev) 5%,transparent);border-left-color:var(--sev)}
+.risk .badge{background:color-mix(in srgb,var(--sev) 10%,transparent)}
+.risk .ai p:first-child{margin-top:0}
+
+.stat{transition:transform .2s var(--ease),background .2s var(--ease)}
+.stat:hover{transform:translateY(-2px);background:color-mix(in srgb,var(--accent) 7%,var(--bg))}
+#chart rect{transform-box:fill-box;transform-origin:bottom;animation:barIn .5s var(--ease) both}
+
+.pg .mk i{animation:pulseBox 3.6s ease-in-out infinite;transition:filter .15s,transform .15s}
+.pg .mk i:hover{filter:saturate(1.3) brightness(1.08);transform:scale(1.02)}
+.pg img{transition:box-shadow .25s var(--ease)}
+.pg:hover img{box-shadow:var(--shadow-lift)}
+#topSummary:not([hidden]){animation:rise .4s var(--ease) both}
+
+@media screen and (max-width:760px){.hero::before{display:none}}
+
+@media print{
+  body{background:#fff;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .topbar,.no-print,.back,.row,.hint,.err,#view-home,footer,button{display:none!important}
+  main{max-width:none;padding:0}
+  .grid{display:block}
+  .card{border-color:#bbb;box-shadow:none;break-inside:avoid;margin-top:10px}
+  .print-only{display:block;font-size:12px;color:#6f6a60;margin:0 0 10px}
+  .risk{break-inside:avoid}
+  body::before,.hero::before{display:none!important}
+  *{animation:none!important;transition:none!important}
+}
+@media screen and (max-width:900px){
+  .grid{grid-template-columns:minmax(0,1fr)}
+  .top-right .pill{display:none}
+  /* one column: flatten the two columns so the risks can lead, right under the summary */
+  .grid>.col{display:contents}
+  .grid .card+.card{margin-top:0}
+  .risks{order:-1}
+}
+@media(max-width:520px){
+  .card{padding:16px}
+  .row button,.row .file{flex:1 1 auto;justify-content:center;text-align:center}
+  .row.actions .primary{margin-right:0;flex-basis:100%}
+  .summary>button{width:100%}
+  .link{padding:9px 2px;margin:-5px 0}
+  /* 16px stops iOS from zooming into a field on focus */
+  textarea,input[type=number]{font-size:16px}
+}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}
+  .mark::after{transform:scaleX(1)}
+  .flash{outline-color:color-mix(in srgb,var(--accent) 75%,transparent)}}
+</style></head><body>
+
+<header class="topbar">
+  <a class="brand" href="#" onclick="home();return false">
+    <svg viewBox="0 0 24 24" width="21" height="21" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M15.6 8.4 13.5 13.5 8.4 15.6 10.5 10.5Z" fill="currentColor"/></svg>
+    Clause Compass
+  </a>
+  <div class="top-right">
+    <span class="pill" id="topSummary" hidden></span>
+    <button class="ghost sm" id="homeBtn" onclick="home()" hidden>← Back to home</button>
+  </div>
+</header>
+
+<main>
+<section id="view-home" class="hero">
+  <p class="eyebrow">Rental agreement check</p>
+  <h1>Know what you're <span class="mark">signing</span>.</h1>
+  <p class="lede">Paste or upload a lease. Clause Compass flags the terms that can cost you money, explains them in plain English, and drafts what to ask your landlord for.</p>
+  <div class="card">
+    <div class="field-head"><label for="txt">Agreement text</label><span class="note" id="count">0 characters</span></div>
+    <textarea id="txt" placeholder="Paste the agreement text here…"></textarea>
+    <div class="row actions">
+      <button class="primary" id="analyzeBtn" onclick="run()">Analyze agreement</button>
+      <button class="ghost" onclick="sample()">Try a sample agreement</button>
+      <label class="file">Upload PDF<input type="file" id="pdf" accept=".pdf" hidden onchange="run(true)"></label>
+    </div>
+    <p class="hint">PDF up to 8 MB and 30 pages. Your text is processed in memory and never stored.</p>
+    <div id="err" class="err" role="alert"></div>
+  </div>
+  <ul class="features">
+    <li><span class="fi" aria-hidden="true"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 4.5 6v6c0 4.3 3.1 7.6 7.5 9 4.4-1.4 7.5-4.7 7.5-9V6Z"/><path d="M12 9v4"/><path d="M12 16.2v.1"/></svg></span><span><b>Clause flags</b><span>Nine checks for lock-ins, deposits, entry and repairs.</span></span></li>
+    <li><span class="fi" aria-hidden="true"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19V5"/><path d="M4 19h16"/><rect x="7" y="12" width="3" height="4" rx=".6"/><rect x="12" y="9" width="3" height="7" rx=".6"/><rect x="17" y="6" width="3" height="10" rx=".6"/></svg></span><span><b>Leave-early cost</b><span>See what walking away actually costs, month by month.</span></span></li>
+    <li><span class="fi" aria-hidden="true"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.5 13.9 9l5.6 1.9-5.6 1.9L12 18.4l-1.9-5.6L4.5 10.9 10.1 9Z"/><path d="M18.5 16v3.5"/><path d="M16.8 17.8h3.5"/></svg></span><span><b>AI explanations</b><span>Ask Gemini what any flagged clause means for you.</span></span></li>
+  </ul>
+</section>
+
+<section id="view-result" hidden>
+  <p class="print-only" id="printHead"></p>
+  <div class="card summary">
+    <div><b id="sum"></b><p class="note" id="warn" style="margin-top:4px"></p></div>
+    <div class="pills" id="pills"></div>
+    <button class="ghost sm no-print" onclick="window.print()">Download report (PDF)</button>
+    <p class="ocr" id="ocrNote" hidden></p>
+  </div>
+
+  <div class="grid">
+    <div class="col">
+      <div class="card">
+        <div class="card-head"><h2>Agreement</h2><span class="note">Tap a clause to find its risk</span></div>
+        <div class="doc" id="doc"></div>
+        <button class="ghost back" onclick="home()">← Back to home</button>
+      </div>
+
+      <div class="card">
+        <div class="card-head"><h2>Key terms</h2><span class="note">Check and correct</span></div>
+        <div class="fields" id="terms"></div>
+      </div>
+
+      <div class="card">
+        <div class="card-head"><h2>If I leave early</h2><span class="note" id="mv"></span></div>
+        <label for="ms">Months stayed</label>
+        <input type="range" id="ms" min="0" max="36" value="3" oninput="sim()">
+        <div class="stats" id="simout"></div>
+        <svg id="chart" viewBox="0 0 400 140" role="img" aria-label="Total cost to leave by month"></svg>
+        <p class="note" id="assume"></p>
+      </div>
+
+      <div class="card" id="pdfCard" hidden>
+        <div class="card-head"><h2>Highlights on your PDF</h2><span class="note" id="pdfNote"></span></div>
+        <div id="pdfPages"></div>
+      </div>
+
+      <div class="card">
+        <div class="card-head"><h2>Message to landlord</h2></div>
+        <div class="row" style="margin-top:0">
+          <button class="primary" onclick="neg()">Draft message</button>
+          <button class="ghost" id="copyBtn" onclick="copyMsg()">Copy</button>
+        </div>
+        <pre id="msg"></pre>
+      </div>
+    </div>
+
+    <div class="col">
+      <div class="card risks">
+        <div class="card-head"><h2>Flagged risks</h2><span class="note" id="riskCount"></span></div>
+        <div id="cards"></div>
+        <p class="note" id="lawNote" style="margin-top:14px" hidden>Legal basis shows short summaries of tenancy law, not the statute text. Verify with the official Act.</p>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+<footer>Informational only, not legal advice. Always read the full agreement before signing.</footer>
+
+<script>
+let D=null,simTimer=null;
+const $=id=>document.getElementById(id);
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const ICON={high:'High',medium:'Medium',low:'Low'};
+const FIELDS=[['rent','Monthly rent'],['deposit','Deposit'],['lockin_months','Lock-in (months)'],['notice_days','Notice (days)'],['penalty_months','Penalty (months of rent)'],['fixed_deductions','Fixed deductions']];
+const money=n=>(+n||0).toLocaleString();
+
+function countChars(){const t=$('txt');$('count').textContent=`${t.value.trim().length.toLocaleString()} characters`}
+$('txt').addEventListener('input',countChars);
+
+function home(){
+  $('view-result').hidden=true;$('view-home').hidden=false;
+  $('homeBtn').hidden=true;$('topSummary').hidden=true;
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+async function sample(){
+  const r=await fetch('/api/sample');
+  $('txt').value=(await r.json()).text;
+  run();
+}
+
+async function run(isFile){
+  $('err').textContent='';
+  const fd=new FormData(), btn=$('analyzeBtn'), label=btn.textContent;
+  if(isFile&&$('pdf').files[0])fd.append('file',$('pdf').files[0]);else fd.append('text',$('txt').value);
+  btn.disabled=true;btn.textContent=isFile?'Reading scan…':'Analyzing…';
+  try{
+    const r=await fetch('/api/analyze',{method:'POST',body:fd});
+    const j=await r.json();
+    if(!r.ok)throw new Error(j.detail||'Something went wrong.');
+    D=j;
+    if(j.ocr){$('txt').value=j.text;$('pdf').value=''}
+    render();
+  }catch(e){$('err').textContent=e.message}
+  finally{btn.disabled=false;btn.textContent=label}
+}
+
+function render(){
+  $('view-home').hidden=true;$('view-result').hidden=false;$('homeBtn').hidden=false;
+  $('sum').textContent=D.summary.text;
+  $('printHead').textContent=`Clause Compass report · ${new Date().toLocaleDateString()} · Informational only, not legal advice.`;
+  $('warn').textContent=D.warnings.join(' ');
+  $('pills').innerHTML=['high','medium','low'].filter(s=>D.summary[s])
+    .map(s=>`<span class="pill ${s}">${D.summary[s]} ${s}</span>`).join('');
+  const t=$('topSummary');t.className='pill '+(['high','medium','low'].find(s=>D.summary[s])||'low');
+  t.textContent=D.summary.text;t.hidden=false;
+
+  $('doc').innerHTML=D.clauses.map(c=>`<button class="cl ${c.severity||''}" id="cl-${c.id}" onclick="go('card-${c.id}')">
+    <small>${esc(c.label)}${c.severity?' · '+ICON[c.severity]:''}</small>${esc(c.text)}</button>`).join('');
+
+  $('riskCount').textContent=D.risks.length?`${D.risks.length} found`:'';
+  $('ocrNote').hidden=!D.ocr;
+  if(D.ocr)$('ocrNote').textContent='This PDF had no text layer, so it was read with OCR. Highlights use OCR word positions, so they can be slightly off. OCR also misreads words: the text is in the box on the home screen (← Back to home) — fix anything wrong and run the analysis again.';
+  $('cards').innerHTML=D.risks.length?D.risks.map((r,i)=>`<article class="risk" id="card-${r.clause_id}" data-sev="${r.severity}" style="--i:${i}">
+    <div class="risk-top"><span class="badge ${r.severity}">${ICON[r.severity]}</span>
+      <button class="link" onclick="go('cl-${r.clause_id}')">${esc(r.clause_id.replace('c','Clause '))} →</button></div>
+    <h3>${esc(r.title)}</h3>
+    <p>${esc(r.reason)}</p>
+    <p class="ask"><span>Ask for</span>${esc(r.ask)}</p>
+    ${(r.law||[]).map(l=>`<div class="law"><span>Legal basis</span><p>${esc(l.text)}</p><cite>${esc(l.act)} · ${esc(l.ref)}</cite></div>`).join('')}
+    <button class="ghost sm" data-cid="${r.clause_id}" onclick="explain(this)">✦ Explain with AI</button>
+    <div class="ai" hidden></div>
+  </article>`).join(''):'<p class="note">No risks flagged by the rules. Still read the full agreement.</p>';
+  $('lawNote').hidden=!D.risks.some(r=>r.law&&r.law.length);
+  renderPdf();
+
+  $('terms').innerHTML=FIELDS.map(([k,l])=>`<div><label for="t-${k}">${l}</label>
+    <input type="number" id="t-${k}" value="${esc(D.terms[k]??'')}" oninput="sim()"></div>`).join('')
+    +`<div><label>&nbsp;</label><label class="check"><input type="checkbox" id="t-pr" ${D.terms.penalty_remaining?'checked':''} onchange="sim()"> Pay remaining lock-in rent</label></div>`;
+
+  $('ms').max=Math.max(12,(+D.terms.lockin_months||0)+3);
+  $('msg').textContent='';
+  $('chart').innerHTML='';
+  countChars();
+  sim();
+  window.scrollTo({top:0});
+}
+
+function renderPdf(){
+  const p=D.pdf, card=$('pdfCard');
+  card.hidden=!p||!p.pages||!p.pages.length;
+  if(card.hidden)return;
+  $('pdfNote').textContent=p.truncated?`First ${p.pages.length} flagged pages`:'';
+  $('pdfPages').innerHTML=p.pages.map(pg=>`<figure class="pg"><div class="pgi">
+    <img src="${pg.img}" alt="Page ${pg.page}" loading="lazy">
+    <div class="mk">${p.marks.filter(m=>m.page===pg.page).map(m=>m.rects.map(([x,y,w,h])=>
+      `<i class="${m.severity}" style="left:${x}%;top:${y}%;width:${w}%;height:${h}%" title="${esc(m.clause_id.replace('c','Clause '))}" onclick="go('card-${m.clause_id}')"></i>`).join('')).join('')}</div>
+    </div><figcaption>Page ${pg.page}</figcaption></figure>`).join('');
+}
+
+function go(id){
+  const e=$(id);if(!e)return;
+  e.scrollIntoView({behavior:'smooth',block:'center'});
+  e.classList.remove('flash');void e.offsetWidth;
+  e.classList.add('flash');
+  setTimeout(()=>e.classList.remove('flash'),2600);
+}
+
+async function explain(btn){
+  const card=btn.closest('.risk'), box=card.querySelector('.ai'), cid=btn.dataset.cid;
+  const clause=D.clauses.find(c=>c.id===cid), risk=D.risks.find(r=>r.clause_id===cid);
+  if(!clause)return;
+  box.hidden=false;box.className='ai pending';box.textContent='Asking Gemini…';
+  btn.disabled=true;
+  try{
+    const r=await fetch('/api/explain',{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({text:clause.text,title:risk?risk.title:'',severity:risk?risk.severity:'',
+        law:(risk&&risk.law&&risk.law[0])||null})});
+    const j=await r.json();
+    if(!r.ok)throw new Error(j.detail||'Could not explain this clause.');
+    box.className='ai';
+    box.innerHTML=`<p>${esc(j.explanation).replace(/\n{2,}/g,'</p><p>').replace(/\n/g,'<br>')}</p><span class="src">AI-generated. Verify with the clause text.</span>`;
+  }catch(e){box.className='ai err';box.textContent=e.message}
+  finally{btn.disabled=false}
+}
+
+const v=k=>+($('t-'+k).value)||0;
+function sim(){clearTimeout(simTimer);simTimer=setTimeout(runSim,220)}
+async function runSim(){
+  $('mv').textContent=$('ms').value+(+$('ms').value===1?' month':' months');
+  if(!v('rent'))return;
+  const r=await fetch('/api/simulate',{method:'POST',headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({rent:v('rent'),deposit:v('deposit'),lockin_months:v('lockin_months'),notice_days:v('notice_days'),
+      months_stayed:+$('ms').value,penalty_months:v('penalty_months'),fixed_deductions:v('fixed_deductions'),
+      penalty_remaining:$('t-pr').checked})});
+  const j=await r.json(),x=j.result;
+  $('simout').innerHTML=[['Rent owed',x.rent_owed],['Exit penalty',x.penalty],['Deductions',x.deductions],
+    ['Total to leave',x.total_cost],['Deposit refund',x.net_deposit_refund],['Pay on top',x.out_of_pocket]]
+    .map(([l,n])=>`<div class="stat"><span>${l}</span><b>${money(n)}</b></div>`).join('');
+  const s=j.series,mx=Math.max(...s.map(p=>p.total_cost))||1,w=400/s.length,cur=+$('ms').value,step=Math.ceil(s.length/8);
+  $('chart').innerHTML=s.map((p,i)=>{
+    const h=p.total_cost/mx*100;
+    return `<rect x="${i*w+1.5}" y="${116-h}" width="${w-3}" height="${h}" rx="3" style="fill:${p.month===cur?'var(--ink)':'var(--accent)'}"/>`
+      +(i%step&&p.month!==cur?'':`<text x="${i*w+w/2}" y="134" font-size="10" text-anchor="middle" style="fill:var(--muted)">${p.month}</text>`)
+  }).join('')+`<line x1="0" y1="117" x2="400" y2="117" style="stroke:var(--line)"/>`;
+  $('assume').textContent=j.assumptions;
+}
+
+async function neg(){
+  const r=await fetch('/api/negotiate',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({risks:D.risks})});
+  $('msg').textContent=(await r.json()).message;
+}
+
+function copyMsg(){
+  const t=$('msg').textContent.trim();if(!t)return;
+  navigator.clipboard.writeText(t);
+  const b=$('copyBtn');b.textContent='Copied';setTimeout(()=>b.textContent='Copy',1400);
+}
+</script>
+</body></html>

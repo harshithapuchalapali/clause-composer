@@ -1,0 +1,10 @@
+fastapi
+uvicorn
+python-multipart
+pdfplumber
+pymupdf
+pytesseract
+faiss-cpu
+pydantic
+pytest
+httpx
