@@ -2,6 +2,7 @@
 <html lang="en"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="color-scheme" content="light dark">
+<script>try{var t=localStorage.getItem('cc-theme');if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
 <title>Clause Compass — rental agreement risk check</title>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Ccircle cx='12' cy='12' r='10' fill='%231f5e4b'/%3E%3Cpath d='M15.6 8.4 13.5 13.5 8.4 15.6 10.5 10.5Z' fill='%23fffdf8'/%3E%3C/svg%3E">
 <style>
@@ -14,14 +15,24 @@
   --shadow-lift:0 2px 4px rgba(25,24,23,.06),0 26px 48px -34px rgba(25,24,23,.6);
   --serif:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif;
   --ease:cubic-bezier(.2,.7,.2,1);
+  color-scheme:light;
 }
-@media (prefers-color-scheme:dark){:root{
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){
   --bg:#131311;--surface:#1b1b18;--ink:#f1ede4;--muted:#a29c90;--line:#302e29;
   --accent:#84d3b2;--accent-ink:#0f231b;
   --high:#e88a6d;--med:#dfb256;--low:#a8c06b;
   --high-bg:#2c1d18;--med-bg:#2b2517;--low-bg:#20261a;--shadow:none;
   --shadow-lift:0 0 0 1px rgba(255,255,255,.03),0 26px 48px -30px rgba(0,0,0,.9);
+  color-scheme:dark;
 }}
+:root[data-theme=dark]{
+  --bg:#131311;--surface:#1b1b18;--ink:#f1ede4;--muted:#a29c90;--line:#302e29;
+  --accent:#84d3b2;--accent-ink:#0f231b;
+  --high:#e88a6d;--med:#dfb256;--low:#a8c06b;
+  --high-bg:#2c1d18;--med-bg:#2b2517;--low-bg:#20261a;--shadow:none;
+  --shadow-lift:0 0 0 1px rgba(255,255,255,.03),0 26px 48px -30px rgba(0,0,0,.9);
+  color-scheme:dark;
+}
 *{box-sizing:border-box}
 html{background:var(--bg);overflow-x:clip}
 body{margin:0;background:transparent;color:var(--ink);font:16px/1.6 ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
@@ -57,6 +68,7 @@ button:disabled{opacity:.6;cursor:progress}
 .ghost{background:transparent;border-color:var(--line);color:var(--ink)}
 .ghost:hover{border-color:var(--accent);color:var(--accent)}
 .sm{padding:8px 12px;font-size:13px}
+.theme-btn{display:inline-flex;align-items:center;justify-content:center;padding:8px}
 .link{background:none;border:0;padding:0;font-size:12.5px;color:var(--accent);text-decoration:underline;text-underline-offset:3px}
 .file{display:inline-flex;align-items:center;gap:8px;border-color:var(--line)}
 .file:hover{border-color:var(--accent);color:var(--accent)}
@@ -230,6 +242,8 @@ textarea:focus,input[type=number]:focus{outline:none;border-color:var(--accent);
 @media screen and (max-width:760px){.hero::before{display:none}}
 
 @media print{
+  :root,:root[data-theme=dark]{--bg:#fff;--surface:#fff;--ink:#191817;--muted:#6f6a60;--line:#e2dcd1;--accent:#1f5e4b;--accent-ink:#fffdf8;
+    --high:#b4472c;--med:#a97a10;--low:#5f7a34;--high-bg:#fbe9e4;--med-bg:#fbf1dc;--low-bg:#eff3e2}
   body{background:#fff;-webkit-print-color-adjust:exact;print-color-adjust:exact}
   .topbar,.no-print,.back,.row,.hint,.err,#view-home,footer,button{display:none!important}
   main{max-width:none;padding:0}
@@ -270,6 +284,7 @@ textarea:focus,input[type=number]:focus{outline:none;border-color:var(--accent);
   <div class="top-right">
     <span class="pill" id="topSummary" hidden></span>
     <button class="ghost sm" id="homeBtn" onclick="home()" hidden>← Back to home</button>
+    <button class="ghost sm theme-btn" id="themeBtn" onclick="toggleTheme()" title="Switch light/dark"></button>
   </div>
 </header>
 
@@ -361,6 +376,24 @@ const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&
 const ICON={high:'High',medium:'Medium',low:'Low'};
 const FIELDS=[['rent','Monthly rent'],['deposit','Deposit'],['lockin_months','Lock-in (months)'],['notice_days','Notice (days)'],['penalty_months','Penalty (months of rent)'],['fixed_deductions','Fixed deductions']];
 const money=n=>(+n||0).toLocaleString();
+
+const mq=matchMedia('(prefers-color-scheme:dark)');
+const SUN='<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2.5v2M12 19.5v2M2.5 12h2M19.5 12h2M5 5l1.4 1.4M17.6 17.6 19 19M19 5l-1.4 1.4M6.4 17.6 5 19"/></svg>';
+const MOON='<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4 8.5 8.5 0 1 0 20 14.5Z"/></svg>';
+const isDark=()=>document.documentElement.dataset.theme?document.documentElement.dataset.theme==='dark':mq.matches;
+function paintTheme(){
+  const dark=isDark(), b=$('themeBtn');
+  b.innerHTML=(dark?SUN:MOON)+`<span class="sr">Switch to ${dark?'light':'dark'} mode</span>`;
+  b.setAttribute('aria-label',`Switch to ${dark?'light':'dark'} mode`);
+  b.setAttribute('aria-pressed',dark);
+}
+function toggleTheme(){
+  document.documentElement.dataset.theme=isDark()?'light':'dark';
+  try{localStorage.setItem('cc-theme',document.documentElement.dataset.theme)}catch(e){}
+  paintTheme();
+}
+paintTheme();
+mq.addEventListener('change',paintTheme);
 
 function countChars(){const t=$('txt');$('count').textContent=`${t.value.trim().length.toLocaleString()} characters`}
 $('txt').addEventListener('input',countChars);
