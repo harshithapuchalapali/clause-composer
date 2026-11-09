@@ -29,7 +29,7 @@ To test the PDF upload path, use the PDFs in `samples/` (see `samples/README.md`
 Digital PDF + pasted text, OCR for scanned PDFs (Tesseract), segmentation, classification, term extraction, 9 risk rules, law-text retrieval (FAISS over `data/law/tenancy.json`, Gemini embeddings, keyword fallback offline), Gemini clause explanations grounded in the retrieved law, redaction module, simulator (tested by hand-calculated cases), negotiation draft, responsive UI.
 
 ## Highlights and report export
-For PDFs with a text layer, `/api/analyze` also returns the flagged clauses' positions: the pages that carry a flag are rendered at 90 dpi (first 8 such pages) and each match is drawn as a coloured box over the page, severity-tinted, clickable to jump to the risk card. Scanned (OCR) PDFs have no text layer to anchor to, so they show no highlights. "Download report (PDF)" opens the browser print dialog with a print stylesheet that flattens the result into a clean document.
+For PDFs with a text layer, `/api/analyze` also returns the flagged clauses' positions: the pages that carry a flag are rendered at 90 dpi (first 8 such pages) and each match is drawn as a coloured box over the page, severity-tinted, clickable to jump to the risk card. Scanned (OCR) PDFs have no text layer, so the clauses are matched against the OCR word boxes instead (words below confidence 60 are dropped, matches on one line are merged into a strip). "Download report (PDF)" opens the browser print dialog with a print stylesheet that flattens the result into a clean document.
 
 ## OCR
 Install Tesseract once, then restart the server:
@@ -45,4 +45,4 @@ The app looks for `C:\Program Files\Tesseract-OCR\tesseract.exe`; set `TESSERACT
 Set `GEMINI_API_KEY` in `backend/.env` (gitignored) or the environment. Optional `GEMINI_MODEL` overrides the default `gemini-3.1-flash-lite`; `GEMINI_EMBED_MODEL` overrides the embedding model.
 
 ## Not built yet (from the doc)
-Docker/CI, deployment.
+CI.

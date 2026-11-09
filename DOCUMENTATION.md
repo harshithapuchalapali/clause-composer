@@ -631,7 +631,7 @@ The app looks for `C:\Program Files\Tesseract-OCR\tesseract.exe`; set `TESSERACT
 - the API routes answer correctly, including the OCR path,
 - the explanation prompt and route,
 - PDF marks land on the right page, and are empty when nothing is flagged,
-- scanned PDFs get OCR-positioned boxes inside the page bounds.
+- scanned PDFs fall back to OCR (`test_scanned_pdf_falls_back_to_ocr`).
 
 ---
 
@@ -689,7 +689,8 @@ These are real, measured, and worth knowing before showing the app to others.
 - `redact.py` is currently dead code.
 
 **Not built**
-- Docker, CI, deployment, user accounts, saved history, multi-language support.
+- CI, user accounts, saved history, multi-language support.
+- Docker and deployment exist (`Dockerfile`, HF Spaces config in `README.md`); CI does not.
 
 ---
 
